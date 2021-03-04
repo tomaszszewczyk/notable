@@ -1,7 +1,7 @@
 ---
 title: 14 - AsciiMath
-created: '2019-03-02T01:08:51.683Z'
-modified: '2019-03-02T02:05:37.445Z'
+created: "2019-03-02T01:08:51.683Z"
+modified: "2019-03-02T02:05:37.445Z"
 tags: [Plugins, Notebooks/Theming]
 ---
 
@@ -13,7 +13,7 @@ Single char &2&
 
 Block:
 
-&&sum_(i=1)^n i^3=((n(n+1))/2)^2&&
+&&sum\_(i=1)^n i^3=((n(n+1))/2)^2&&
 
 Codeblock:
 

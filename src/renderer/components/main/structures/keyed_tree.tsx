@@ -1,14 +1,11 @@
-
 /* IMPORT */
 
-import * as React from 'react';
-import Tree from './tree';
+import * as React from "react";
+import Tree from "./tree";
 
 /* KEYED TREE */
 
-const KeyedTree = ( props ) => (
-  <Tree {...props} isKeyed={true} />
-);
+const KeyedTree = (props) => <Tree {...props} isKeyed={true} />;
 
 /* EXPORT */
 

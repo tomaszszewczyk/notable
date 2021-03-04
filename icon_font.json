@@ -38,8 +38,6 @@
     "icons": "./resources/font_icons",
     "fonts": "./src/renderer/template/dist/fonts",
     "fontName": "IconFont",
-    "formats": [
-      "woff2"
-    ]
+    "formats": ["woff2"]
   }
 }

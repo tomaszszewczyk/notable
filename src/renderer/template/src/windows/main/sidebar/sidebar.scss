@@ -1,6 +1,4 @@
-
 .sidebar {
-
   flex: $sidebar-ratio $sidebar-ratio $sidebar-min-width;
   min-width: $sidebar-min-width;
   max-width: $sidebar-max-width;
@@ -12,5 +10,4 @@
   .list-item i.icon.collapser {
     transition: transform $animation-fast;
   }
-
 }

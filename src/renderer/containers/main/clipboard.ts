@@ -1,33 +1,24 @@
-
 /* IMPORT */
 
-import {clipboard} from 'electron';
-import {Container} from 'overstated';
+import { clipboard } from "electron";
+import { Container } from "overstated";
 
 /* CLIPBOARD */
 
 class Clipboard extends Container<ClipboardState, MainCTX> {
-
   /* API */
 
-  get = (): string  => {
+  get = (): string => {
+    return clipboard.readText();
+  };
 
-    return clipboard.readText ();
-
-  }
-
-  set = ( text: string ): void => {
-
-    clipboard.writeText ( text );
-
-  }
+  set = (text: string): void => {
+    clipboard.writeText(text);
+  };
 
   reset = (): void => {
-
-    clipboard.clear ();
-
-  }
-
+    clipboard.clear();
+  };
 }
 
 /* EXPORT */

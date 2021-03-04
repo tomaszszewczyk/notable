@@ -1,4 +1,3 @@
-
 // @require ./components/core/body.scss
 // @require ./components/core/input.scss
 // @require ./components/core/selection.scss
@@ -19,33 +18,29 @@
 // @require ./components/widgets/toolbar.scss
 // @require ./components/windows/main/main.scss
 
-@mixin theme ( $name, $theme ) {
-
+@mixin theme($name, $theme) {
   .theme-#{$name} {
+    @include theme-core-body($theme);
+    @include theme-core-selection($theme);
+    @include theme-core-input($theme);
 
-    @include theme-core-body ( $theme );
-    @include theme-core-selection ( $theme );
-    @include theme-core-input ( $theme );
+    @include theme-color-base($theme);
+    @include theme-color-accent($theme);
+    @include theme-color-highlight($theme);
+    @include theme-color-warning($theme);
 
-    @include theme-color-base ( $theme );
-    @include theme-color-accent ( $theme );
-    @include theme-color-highlight ( $theme );
-    @include theme-color-warning ( $theme );
+    @include theme-widget-column($theme);
+    @include theme-widget-editor($theme);
+    @include theme-widget-highlighter($theme);
+    @include theme-widget-katex($theme);
+    @include theme-widget-list($theme);
+    @include theme-widget-monaco($theme);
+    @include theme-widget-notification($theme);
+    @include theme-widget-popover($theme);
+    @include theme-widget-preview($theme);
+    @include theme-widget-quick-panel($theme);
+    @include theme-widget-toolbar($theme);
 
-    @include theme-widget-column ( $theme );
-    @include theme-widget-editor ( $theme );
-    @include theme-widget-highlighter ( $theme );
-    @include theme-widget-katex ( $theme );
-    @include theme-widget-list ( $theme );
-    @include theme-widget-monaco ( $theme );
-    @include theme-widget-notification ( $theme );
-    @include theme-widget-popover ( $theme );
-    @include theme-widget-preview ( $theme );
-    @include theme-widget-quick-panel ( $theme );
-    @include theme-widget-toolbar ( $theme );
-
-    @include theme-window-main ( $theme );
-
+    @include theme-window-main($theme);
   }
-
 }

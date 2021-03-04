@@ -1,7 +1,5 @@
-
 .list-item {
-
-  @include text-truncate ();
+  @include text-truncate();
   height: $list-item-height;
   padding: $list-item-padding-y $list-item-padding-x;
   margin: 0 !important;
@@ -17,7 +15,7 @@
   }
 
   > .title {
-    @include text-truncate ();
+    @include text-truncate();
     margin: 0;
     font-weight: normal;
     text-align: left;
@@ -31,11 +29,10 @@
   > .description {
     font-weight: normal;
     margin-left: $gutter-half;
-    opacity: .5;
+    opacity: 0.5;
   }
 
   &.empty {
-
     pointer-events: none !important;
     text-align: center;
     font-weight: normal;
@@ -44,7 +41,6 @@
       margin: 0 auto;
       text-align: center !important;
     }
-
   }
 
   .on-hover {
@@ -56,14 +52,11 @@
     opacity: 1;
   }
 
-  @for $i from 1 through length( $list-item-level-spacings ) {
-
-    $spacing: nth( $list-item-level-spacings, $i );
+  @for $i from 1 through length($list-item-level-spacings) {
+    $spacing: nth($list-item-level-spacings, $i);
 
     &.level-#{$i - 1} {
       padding-left: $spacing;
     }
-
   }
-
 }

@@ -1,7 +1,7 @@
 ---
 title: 13 - Highlighter
-created: '2019-03-02T01:11:58.083Z'
-modified: '2019-03-02T02:05:37.443Z'
+created: "2019-03-02T01:11:58.083Z"
+modified: "2019-03-02T02:05:37.443Z"
 tags: [Plugins, Notebooks/Theming]
 ---
 
@@ -12,15 +12,16 @@ Markdown:
 ```markdown
 # H1
 
-With equals
-===
+# With equals
 
 _emphasis_
 **strong**
 ~~Strikethrough~~
 
 1. Ordered list
+
 - Unordered list
+
 * Unordered list
 
 > Quote
@@ -60,10 +61,10 @@ Javascript:
  * Multi-line comment
  */
 
-function fnName () {
-  if ( NaN ) {
-    const str = [`Number: ${1}`, 'foo', /re/gi];
-    str.blink (); // Seriously...
+function fnName() {
+  if (NaN) {
+    const str = [`Number: ${1}`, "foo", /re/gi];
+    str.blink(); // Seriously...
   }
   return 1 + 2 + 3;
 }
@@ -73,7 +74,7 @@ CSS:
 
 ```css
 #foo:before {
-  content: 'foo' !important;
+  content: "foo" !important;
 }
 ```
 

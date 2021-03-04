@@ -1,78 +1,66 @@
-
 /* IMPORT */
 
-import {Container, autosuspend} from 'overstated';
-import Settings from '@common/settings';
+import { Container, autosuspend } from "overstated";
+import Settings from "@common/settings";
 
 /* THEME */
 
 class Theme extends Container<ThemeState, MainCTX> {
-
   /* STATE */
 
   state = {
-    theme: Settings.get ( 'theme' )
+    theme: Settings.get("theme"),
   };
 
   /* CONSTRUCTOR */
 
-  constructor () {
+  constructor() {
+    super();
 
-    super ();
-
-    autosuspend ( this );
-
+    autosuspend(this);
   }
 
   /* HELPERS */
 
-  _updateDocument = ( doc: Document, theme: string ): void => {
-
+  _updateDocument = (doc: Document, theme: string): void => {
     const $body = $(doc.body),
-          cls = $body.attr ( 'class' );
+      cls = $body.attr("class");
 
-    if ( !cls ) return;
+    if (!cls) return;
 
-    $body.attr ( 'class', cls.replace ( /(^|\s)theme-([^\s"']+)/i, `$1theme-${theme}` ) ); //UGLY: and probably fragile too
-
-  }
+    $body.attr(
+      "class",
+      cls.replace(/(^|\s)theme-([^\s"']+)/i, `$1theme-${theme}`)
+    ); //UGLY: and probably fragile too
+  };
 
   /* API */
 
-  isSupported = ( theme: string ): boolean => {
+  isSupported = (theme: string): boolean => {
+    const themes = this.ctx.themes.get();
 
-    const themes = this.ctx.themes.get ();
-
-    return themes.includes ( theme );
-
-  }
+    return themes.includes(theme);
+  };
 
   get = (): string => {
-
     return this.state.theme;
+  };
 
-  }
+  set = (theme: string) => {
+    if (!this.isSupported(theme)) return;
 
-  set = ( theme: string ) => {
+    if (theme === this.state.theme) return;
 
-    if ( !this.isSupported ( theme ) ) return;
+    Settings.set("theme", theme);
 
-    if ( theme === this.state.theme ) return;
+    this._updateDocument(document, theme);
 
-    Settings.set ( 'theme', theme );
-
-    this._updateDocument ( document, theme );
-
-    return this.setState ({ theme });
-
-  }
+    return this.setState({ theme });
+  };
 
   update = () => {
-
-    this._updateDocument ( document, this.state.theme );
-
-  }
-
+    this._updateDocument(document, this.state.theme);
+  };
 }
 
 /* EXPORT */

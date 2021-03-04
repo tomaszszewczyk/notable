@@ -5,10 +5,7 @@
   "release": {
     "github": {
       "enabled": true,
-      "files": [
-        "releases/*",
-        "!releases/builder-effective-config.yaml"
-      ]
+      "files": ["releases/*", "!releases/builder-effective-config.yaml"]
     }
   },
   "scripts": {

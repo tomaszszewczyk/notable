@@ -1,6 +1,5 @@
-
 .list-header {
-  @include center-flex ();
+  @include center-flex();
   border-bottom-width: 1px;
   border-bottom-style: solid;
   height: $list-header-height;

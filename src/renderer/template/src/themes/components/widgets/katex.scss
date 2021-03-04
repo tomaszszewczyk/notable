@@ -1,12 +1,7 @@
-
-@mixin theme-widget-katex ( $theme ) {
-
+@mixin theme-widget-katex($theme) {
   .katex {
-
     .fbox {
-      border-color: map-get( $theme, 'katex.fbox.border' );
+      border-color: map-get($theme, "katex.fbox.border");
     }
-
   }
-
 }

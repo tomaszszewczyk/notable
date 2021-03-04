@@ -1,42 +1,33 @@
-
 /* IMPORT */
 
-import {Container, autosuspend} from 'overstated';
+import { Container, autosuspend } from "overstated";
 
 /* LOADING */
 
 class Loading extends Container<LoadingState, MainCTX> {
-
   /* STATE */
 
   state = {
-    loading: true
+    loading: true,
   };
 
   /* CONSTRUCTOR */
 
-  constructor () {
+  constructor() {
+    super();
 
-    super ();
-
-    autosuspend ( this );
-
+    autosuspend(this);
   }
 
   /* API */
 
   get = (): boolean => {
-
     return this.state.loading;
+  };
 
-  }
-
-  set = ( loading: boolean ) => {
-
-    return this.setState ({ loading });
-
-  }
-
+  set = (loading: boolean) => {
+    return this.setState({ loading });
+  };
 }
 
 /* EXPORT */

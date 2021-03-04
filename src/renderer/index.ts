@@ -1,20 +1,17 @@
-
 /* IMPORT */
 
-import debugging from './debugging';
-import render from './render';
+import debugging from "./debugging";
+import render from "./render";
 
 /* RENDERER */
 
-debugging ();
-render ();
+debugging();
+render();
 
 /* HOT MODULE REPLACEMENT */
 
-if ( module.hot ) {
-
-  module.hot.accept ( './render', () => {
-    require ( './render' ).default ();
+if (module.hot) {
+  module.hot.accept("./render", () => {
+    require("./render").default();
   });
-
 }

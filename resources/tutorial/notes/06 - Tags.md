@@ -15,7 +15,7 @@ Notes can have multiple tags, which are useful for better categorization.
 
 ## Special Tags
 
-- **Notebooks**: You've probably noticed that Notable supports notebooks too. To create one just add a tag starting with `Notebooks/` to a note. 
+- **Notebooks**: You've probably noticed that Notable supports notebooks too. To create one just add a tag starting with `Notebooks/` to a note.
 
 - **Templates**: Notable also supports Templates, to create one just add the `Templates` tag to a note. Of course nesting is supported here too, i.e. `Templates/Work`.
 

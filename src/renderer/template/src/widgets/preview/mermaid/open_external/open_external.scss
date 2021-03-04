@@ -1,8 +1,5 @@
-
 .preview {
-
   .mermaid {
-
     position: relative;
 
     .mermaid-open-external {
@@ -16,15 +13,13 @@
     }
 
     &:hover .mermaid-open-external {
-      opacity: .5;
+      opacity: 0.5;
       &:hover {
-        opacity: .75;
+        opacity: 0.75;
       }
       &:active {
         opacity: 1;
       }
     }
-
   }
-
 }

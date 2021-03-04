@@ -1,7 +1,7 @@
 ---
 title: 16 - mermaid
-created: '2019-03-02T01:10:02.337Z'
-modified: '2019-03-02T02:05:37.447Z'
+created: "2019-03-02T01:10:02.337Z"
+modified: "2019-03-02T02:05:37.447Z"
 tags: [Plugins, Notebooks/Theming]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: 09 - Tasks
-created: '2019-03-02T01:06:18.650Z'
-modified: '2019-03-03T22:34:49.055Z'
+created: "2019-03-02T01:06:18.650Z"
+modified: "2019-03-03T22:34:49.055Z"
 tags: [Basics, Notebooks/Theming]
 ---
 
@@ -11,4 +11,4 @@ tags: [Basics, Notebooks/Theming]
 - [ ] Empty (no space)
 - [ ] Empty (with space)
 - [x] Checked (lowercase)
-- [X] Checked (uppercase)
+- [x] Checked (uppercase)

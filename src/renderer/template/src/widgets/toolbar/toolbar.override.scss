@@ -1,13 +1,10 @@
-
 .toolbar {
-
-  @include center-flex ();
+  @include center-flex();
   overflow: hidden !important;
   padding: $gutter;
 
   &.layout-header,
   &:not(.layout-footer) {
-
     height: $toolbar-height;
     border-bottom-width: 1px;
     border-bottom-style: solid;
@@ -17,11 +14,9 @@
     .button {
       padding: $toolbar-button-padding-y $toolbar-button-padding-x !important;
     }
-
   }
 
   &.layout-header {
-
     -webkit-app-region: drag;
 
     & > :not(.multiple):not(.title) {
@@ -31,7 +26,6 @@
     & > .multiple > :not(.spacer) {
       -webkit-app-region: no-drag;
     }
-
   }
 
   &.layout-footer {
@@ -42,5 +36,4 @@
   &-semaphore-spacer {
     width: $toolbar-semaphore-width;
   }
-
 }

@@ -1,42 +1,33 @@
-
 /* IMPORT */
 
-import {Container, autosuspend} from 'overstated';
+import { Container, autosuspend } from "overstated";
 
 /* THEMES */
 
 class Themes extends Container<ThemesState, MainCTX> {
-
   /* STATE */
 
   state = {
-    themes: ['light', 'dark']
+    themes: ["light", "dark"],
   };
 
   /* CONSTRUCTOR */
 
-  constructor () {
+  constructor() {
+    super();
 
-    super ();
-
-    autosuspend ( this );
-
+    autosuspend(this);
   }
 
   /* API */
 
   get = (): string[] => {
-
     return this.state.themes;
+  };
 
-  }
-
-  set = ( themes: string[] ) => {
-
-    return this.setState ({ themes });
-
-  }
-
+  set = (themes: string[]) => {
+    return this.setState({ themes });
+  };
 }
 
 /* EXPORT */

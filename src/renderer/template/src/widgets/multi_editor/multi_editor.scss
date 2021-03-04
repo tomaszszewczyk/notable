@@ -1,6 +1,4 @@
-
 .multi-editor {
-
   position: absolute;
   top: 50%;
   left: 50%;
@@ -29,7 +27,6 @@
   }
 
   .tagbox {
-
     padding: $gutter !important;
 
     &-partial {
@@ -37,7 +34,5 @@
       margin: 0 $gutter-half $gutter !important;
       min-width: 7.5em !important;
     }
-
   }
-
 }

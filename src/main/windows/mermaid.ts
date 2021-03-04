@@ -1,131 +1,132 @@
-
 /* IMPORT */
 
-import {BrowserWindowConstructorOptions, Menu, MenuItemConstructorOptions} from 'electron';
-import {is} from 'electron-util';
-import * as windowStateKeeper from 'electron-window-state';
-import pkg from '@root/package.json';
-import Environment from '@common/environment';
-import UMenu from '@main/utils/menu';
-import Route from './route';
+import {
+  BrowserWindowConstructorOptions,
+  Menu,
+  MenuItemConstructorOptions,
+} from "electron";
+import { is } from "electron-util";
+import * as windowStateKeeper from "electron-window-state";
+import pkg from "@root/package.json";
+import Environment from "@common/environment";
+import UMenu from "@main/utils/menu";
+import Route from "./route";
 
 /* MERMAID */
 
 class Mermaid extends Route {
-
   /* VARIABLES */
 
   data: string;
 
   /* CONSTRUCTOR */
 
-  constructor ( name = 'mermaid', options: BrowserWindowConstructorOptions = { frame: true, autoHideMenuBar: true, backgroundColor: '#ffffff', title: 'mermaid | Notable', titleBarStyle: 'default' }, stateOptions: windowStateKeeper.Options = {}, data: string ) {
-
-    super ( name, options, stateOptions );
+  constructor(
+    name = "mermaid",
+    options: BrowserWindowConstructorOptions = {
+      frame: true,
+      autoHideMenuBar: true,
+      backgroundColor: "#ffffff",
+      title: "mermaid | Notable",
+      titleBarStyle: "default",
+    },
+    stateOptions: windowStateKeeper.Options = {},
+    data: string
+  ) {
+    super(name, options, stateOptions);
 
     this.data = data;
-
   }
 
   /* SPECIAL */
 
-  initMenu () {
-
-    const template: MenuItemConstructorOptions[] = UMenu.filterTemplate ([
+  initMenu() {
+    const template: MenuItemConstructorOptions[] = UMenu.filterTemplate([
       {
         label: pkg.productName,
-        submenu: [
-          { role: 'close' }
-        ]
+        submenu: [{ role: "close" }],
       },
       {
-        label: 'Edit',
+        label: "Edit",
         submenu: [
-          { role: 'undo' },
-          { role: 'redo' },
-          { type: 'separator' },
-          { role: 'cut' },
-          { role: 'copy' },
-          { role: 'paste' },
-          { role: 'pasteandmatchstyle' },
-          { role: 'delete' },
-          { role: 'selectall' },
+          { role: "undo" },
+          { role: "redo" },
+          { type: "separator" },
+          { role: "cut" },
+          { role: "copy" },
+          { role: "paste" },
+          { role: "pasteandmatchstyle" },
+          { role: "delete" },
+          { role: "selectall" },
           {
-            type: 'separator',
-            visible: is.macos
+            type: "separator",
+            visible: is.macos,
           },
           {
-            label: 'Speech',
-            submenu: [
-              { role: 'startspeaking' },
-              { role: 'stopspeaking' }
-            ],
-            visible: is.macos
-          }
-        ]
+            label: "Speech",
+            submenu: [{ role: "startspeaking" }, { role: "stopspeaking" }],
+            visible: is.macos,
+          },
+        ],
       },
       {
-        label: 'View',
+        label: "View",
         submenu: [
           {
-            role: 'reload',
-            visible: Environment.isDevelopment
+            role: "reload",
+            visible: Environment.isDevelopment,
           },
           {
-            role: 'forcereload',
-            visible: Environment.isDevelopment
+            role: "forcereload",
+            visible: Environment.isDevelopment,
           },
           {
-            type: 'separator',
-            visible: Environment.isDevelopment
+            type: "separator",
+            visible: Environment.isDevelopment,
           },
-          { role: 'resetzoom' },
-          { role: 'zoomin' },
-          { role: 'zoomout' }
-        ]
+          { role: "resetzoom" },
+          { role: "zoomin" },
+          { role: "zoomout" },
+        ],
       },
       {
-        role: 'window',
+        role: "window",
         submenu: [
-          { role: 'close' },
-          { role: 'minimize' },
+          { role: "close" },
+          { role: "minimize" },
           {
-            role: 'zoom',
-            visible: is.macos
+            role: "zoom",
+            visible: is.macos,
           },
-          { type: 'separator' },
+          { type: "separator" },
           {
-            type: 'checkbox',
-            label: 'Float on Top',
-            checked: !!this.win && this.win.isAlwaysOnTop (),
-            click: () => this.win.setAlwaysOnTop ( !this.win.isAlwaysOnTop () )
-          },
-          {
-            type: 'separator',
-            visible: is.macos
+            type: "checkbox",
+            label: "Float on Top",
+            checked: !!this.win && this.win.isAlwaysOnTop(),
+            click: () => this.win.setAlwaysOnTop(!this.win.isAlwaysOnTop()),
           },
           {
-            role: 'front',
-            visible: is.macos
-          }
-        ]
-      }
+            type: "separator",
+            visible: is.macos,
+          },
+          {
+            role: "front",
+            visible: is.macos,
+          },
+        ],
+      },
     ]);
 
-    const menu = Menu.buildFromTemplate ( template );
+    const menu = Menu.buildFromTemplate(template);
 
-    Menu.setApplicationMenu ( menu );
-
+    Menu.setApplicationMenu(menu);
   }
 
   /* LOAD */
 
-  load () {
-
-    this.win.loadURL ( this.data );
-
+  load() {
+    this.win.loadURL(this.data);
   }
-
 }
 
 /* EXPORT */

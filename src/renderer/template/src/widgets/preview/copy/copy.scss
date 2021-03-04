@@ -1,8 +1,5 @@
-
 .preview {
-
   .copy-wrapper {
-
     position: relative;
     margin-bottom: 16px;
 
@@ -17,15 +14,13 @@
     }
 
     &:hover .copy {
-      opacity: .5;
+      opacity: 0.5;
       &:hover {
-        opacity: .75;
+        opacity: 0.75;
       }
       &:active {
         opacity: 1;
       }
     }
-
   }
-
 }

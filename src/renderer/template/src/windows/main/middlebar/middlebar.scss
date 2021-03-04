@@ -1,6 +1,4 @@
-
 .middlebar {
-
   flex: $middlebar-ratio $middlebar-ratio $middlebar-min-width;
   min-width: $middlebar-min-width;
   max-width: $middlebar-max-width;
@@ -10,7 +8,6 @@
   }
 
   .list-header {
-
     .sort-by,
     .sort-type {
       cursor: pointer;
@@ -25,7 +22,5 @@
         transition: transform $animation-fast;
       }
     }
-
   }
-
 }

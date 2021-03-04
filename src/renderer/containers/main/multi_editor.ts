@@ -1,300 +1,270 @@
-
 /* IMPORT */
 
-import * as _ from 'lodash';
-import Dialog from 'electron-dialog';
-import {Container, autosuspend} from 'overstated';
-import Tags from '@renderer/utils/tags';
+import * as _ from "lodash";
+import Dialog from "electron-dialog";
+import { Container, autosuspend } from "overstated";
+import Tags from "@renderer/utils/tags";
 
 /* EDITOR */
 
 class MultiEditor extends Container<MultiEditorState, MainCTX> {
-
   /* STATE */
 
   state = {
     notes: [] as NoteObj[],
-    skippable: false // Some refreshing tasks are skippable since we are going to call the same function again
+    skippable: false, // Some refreshing tasks are skippable since we are going to call the same function again
   };
 
   /* CONSTRUCTOR */
 
-  constructor () {
+  constructor() {
+    super();
 
-    super ();
-
-    autosuspend ( this );
-
+    autosuspend(this);
   }
 
   /* HELPERS */
 
-  _confirm ( message: string ) {
+  _confirm(message: string) {
+    const notes = this.getNotes();
 
-    const notes = this.getNotes ();
+    message = message.replace(/\[notes-nr\]/g, String(notes.length));
 
-    message = message.replace ( /\[notes-nr\]/g, String ( notes.length ) );
-
-    return Dialog.confirm ( message );
-
+    return Dialog.confirm(message);
   }
 
-  async _callAll ( method: Function, args: any[] = [] ) {
+  async _callAll(method: Function, args: any[] = []) {
+    await this.setSkippable(true);
 
-    await this.setSkippable ( true );
+    const notes = this.getNotes();
 
-    const notes = this.getNotes ();
-
-    for ( let i = 0, l = notes.length; i < l; i++ ) {
-
+    for (let i = 0, l = notes.length; i < l; i++) {
       const note = notes[i],
-            isLast = i === ( l - 1 );
+        isLast = i === l - 1;
 
-      if ( isLast ) await this.setSkippable ( false );
+      if (isLast) await this.setSkippable(false);
 
-      await method.call ( undefined, note, ...args );
-
+      await method.call(undefined, note, ...args);
     }
-
   }
 
   /* API */
 
-  toggleNoteRange = ( noteEnd: NoteObj ) => {
+  toggleNoteRange = (noteEnd: NoteObj) => {
+    const notesSelected = this.getNotes(),
+      notes = this.ctx.search.getNotes(),
+      noteStart = _.last(notesSelected);
 
-    const notesSelected = this.getNotes (),
-          notes = this.ctx.search.getNotes (),
-          noteStart = _.last ( notesSelected );
+    if (!noteStart) return;
 
-    if ( !noteStart ) return;
+    let startIndex = notes.indexOf(noteStart),
+      endIndex = notes.indexOf(noteEnd),
+      minIndex = Math.min(startIndex, endIndex),
+      maxIndex = Math.max(startIndex, endIndex);
 
-    let startIndex = notes.indexOf ( noteStart ),
-        endIndex = notes.indexOf ( noteEnd ),
-        minIndex = Math.min ( startIndex, endIndex ),
-        maxIndex = Math.max ( startIndex, endIndex );
+    if (minIndex === maxIndex) return;
 
-    if ( minIndex === maxIndex ) return;
-
-    if ( minIndex === startIndex ) { // Direction: down
+    if (minIndex === startIndex) {
+      // Direction: down
 
       minIndex += 1;
       maxIndex += 1;
-
     }
 
-    const notesTarget = notes.slice ( minIndex, maxIndex ),
-          notesToSelect = _.difference ( notesTarget, notesSelected ),
-          notesToDeselect = _.intersection ( notesTarget, notesSelected ),
-          notesNext = notesSelected.filter ( note => !notesToDeselect.includes ( note ) ).concat ( notesToSelect );
+    const notesTarget = notes.slice(minIndex, maxIndex),
+      notesToSelect = _.difference(notesTarget, notesSelected),
+      notesToDeselect = _.intersection(notesTarget, notesSelected),
+      notesNext = notesSelected
+        .filter((note) => !notesToDeselect.includes(note))
+        .concat(notesToSelect);
 
-    return this.setNotes ( notesNext );
+    return this.setNotes(notesNext);
+  };
 
-  }
-
-  toggleNote = ( note: NoteObj, force?: boolean ) => {
-
-    const notes = this.getNotes (),
-          index = notes.indexOf ( note );
+  toggleNote = (note: NoteObj, force?: boolean) => {
+    const notes = this.getNotes(),
+      index = notes.indexOf(note);
 
     let notesNext: NoteObj[] = [];
 
-    if ( force !== true && index >= 0 ) { // Remove
+    if (force !== true && index >= 0) {
+      // Remove
 
-      notesNext = notes.filter ( ( note, i ) => i !== index );
+      notesNext = notes.filter((note, i) => i !== index);
+    } else if (force !== false) {
+      // Add
 
-    } else if ( force !== false ) { // Add
-
-      notesNext = notes.concat ([ note ]);
-
+      notesNext = notes.concat([note]);
     }
 
-    return this.setNotes ( notesNext );
-
-  }
+    return this.setNotes(notesNext);
+  };
 
   getNotes = (): NoteObj[] => {
-
     return this.state.notes;
+  };
 
-  }
+  setNotes = async (notes: NoteObj[]) => {
+    if (notes.length === 0) {
+      const note = this.ctx.note.get(),
+        notes = note ? [note] : [];
 
-  setNotes = async ( notes: NoteObj[] ) => {
+      return this.setState({ notes });
+    } else if (notes.length === 1) {
+      const note = this.ctx.note.get();
 
-    if ( notes.length === 0 ) {
+      await this.setState({ notes });
 
-      const note = this.ctx.note.get (),
-            notes = note ? [note] : [];
-
-      return this.setState ({ notes });
-
-    } else if ( notes.length === 1 ) {
-
-      const note = this.ctx.note.get ();
-
-      await this.setState ({ notes });
-
-      if ( note !== notes[0] ) {
-
-        return this.ctx.note.set ( notes[0] );
-
+      if (note !== notes[0]) {
+        return this.ctx.note.set(notes[0]);
       }
-
     } else {
-
-      return this.setState ({ notes });
-
+      return this.setState({ notes });
     }
-
-  }
+  };
 
   isEditing = (): boolean => {
+    return this.getNotes().length > 1;
+  };
 
-    return this.getNotes ().length > 1;
+  isNoteSelected = (note: NoteObj): boolean => {
+    const notes = this.getNotes();
 
-  }
-
-  isNoteSelected = ( note: NoteObj ): boolean => {
-
-    const notes = this.getNotes ();
-
-    return notes.includes ( note );
-
-  }
+    return notes.includes(note);
+  };
 
   isSkippable = (): boolean => {
-
     return this.state.skippable;
+  };
 
-  }
-
-  setSkippable = ( skippable: boolean ) => {
-
-    return this.setState ({ skippable });
-
-  }
+  setSkippable = (skippable: boolean) => {
+    return this.setState({ skippable });
+  };
 
   selectAll = () => {
+    const notesAll = this.ctx.search.getNotes();
 
-    const notesAll = this.ctx.search.getNotes ();
-
-    return this.setNotes ( notesAll );
-
-  }
+    return this.setNotes(notesAll);
+  };
 
   selectInvert = () => {
+    const notesAll = this.ctx.search.getNotes(),
+      notes = this.getNotes(),
+      notesInverted = notesAll.filter((note) => !notes.includes(note));
 
-    const notesAll = this.ctx.search.getNotes (),
-          notes = this.getNotes (),
-          notesInverted = notesAll.filter ( note => !notes.includes ( note ) );
-
-    return this.setNotes ( notesInverted );
-
-  }
+    return this.setNotes(notesInverted);
+  };
 
   selectClear = () => {
-
-    return this.setNotes ([]);
-
-  }
+    return this.setNotes([]);
+  };
 
   update = () => {
+    const notesAll = this.ctx.search.getNotes(),
+      notes = this.getNotes(),
+      notesNext = notes
+        .map((note) =>
+          notesAll.find((note2) => note.filePath === note2.filePath)
+        )
+        .filter(_.identity) as NoteObj[];
 
-    const notesAll = this.ctx.search.getNotes (),
-          notes = this.getNotes (),
-          notesNext = notes.map ( note => notesAll.find ( note2 => note.filePath === note2.filePath ) ).filter ( _.identity ) as NoteObj[];
-
-    return this.setNotes ( notesNext );
-
-  }
+    return this.setNotes(notesNext);
+  };
 
   /* API - ACTIONS */
 
   favorite = () => {
+    if (!this._confirm("Are you sure you want to favorite [notes-nr] notes?"))
+      return;
 
-    if ( !this._confirm ( 'Are you sure you want to favorite [notes-nr] notes?' ) ) return;
-
-    return this._callAll ( this.ctx.note.toggleFavorite, [true] );
-
-  }
+    return this._callAll(this.ctx.note.toggleFavorite, [true]);
+  };
 
   unfavorite = () => {
+    if (!this._confirm("Are you sure you want to unfavorite [notes-nr] notes?"))
+      return;
 
-    if ( !this._confirm ( 'Are you sure you want to unfavorite [notes-nr] notes?' ) ) return;
-
-    return this._callAll ( this.ctx.note.toggleFavorite, [false] );
-
-  }
+    return this._callAll(this.ctx.note.toggleFavorite, [false]);
+  };
 
   pin = () => {
+    if (!this._confirm("Are you sure you want to pin [notes-nr] notes?"))
+      return;
 
-    if ( !this._confirm ( 'Are you sure you want to pin [notes-nr] notes?' ) ) return;
-
-    return this._callAll ( this.ctx.note.togglePin, [true] );
-
-  }
+    return this._callAll(this.ctx.note.togglePin, [true]);
+  };
 
   unpin = () => {
+    if (!this._confirm("Are you sure you want to unpin [notes-nr] notes?"))
+      return;
 
-    if ( !this._confirm ( 'Are you sure you want to unpin [notes-nr] notes?' ) ) return;
-
-    return this._callAll ( this.ctx.note.togglePin, [false] );
-
-  }
+    return this._callAll(this.ctx.note.togglePin, [false]);
+  };
 
   trash = () => {
+    if (
+      !this._confirm("Are you sure you want to move to trash [notes-nr] notes?")
+    )
+      return;
 
-    if ( !this._confirm ( 'Are you sure you want to move to trash [notes-nr] notes?' ) ) return;
-
-    return this._callAll ( this.ctx.note.toggleDeleted, [true] );
-
-  }
+    return this._callAll(this.ctx.note.toggleDeleted, [true]);
+  };
 
   untrash = () => {
+    if (!this._confirm("Are you sure you want to restore [notes-nr] notes?"))
+      return;
 
-    if ( !this._confirm ( 'Are you sure you want to restore [notes-nr] notes?' ) ) return;
-
-    return this._callAll ( this.ctx.note.toggleDeleted, [false] );
-
-  }
+    return this._callAll(this.ctx.note.toggleDeleted, [false]);
+  };
 
   delete = () => {
+    if (
+      !this._confirm(
+        "Are you sure you want to permanently delete [notes-nr] notes?"
+      )
+    )
+      return;
 
-    if ( !this._confirm ( 'Are you sure you want to permanently delete [notes-nr] notes?' ) ) return;
+    return this._callAll(this.ctx.note.delete, [true]);
+  };
 
-    return this._callAll ( this.ctx.note.delete, [true] );
+  tagsAdd = async (tags: string[]) => {
+    if (!tags.length) return Dialog.alert("No tags provided");
 
-  }
+    tags = Tags.sort(tags) as string[];
 
-  tagsAdd = async ( tags: string[] ) => {
+    if (
+      !this._confirm(
+        `Are you sure you want to add these tags to [notes-nr] notes: ${tags
+          .map((tag) => `"${tag}"`)
+          .join(", ")}?`
+      )
+    )
+      return;
 
-    if ( !tags.length ) return Dialog.alert ( 'No tags provided' );
+    return this._callAll(this.ctx.note.addTags, [tags]);
+  };
 
-    tags = Tags.sort ( tags ) as string[];
+  tagsRemove = async (tags: string[]) => {
+    if (!tags.length) return Dialog.alert("No tags provided");
 
-    if ( !this._confirm ( `Are you sure you want to add these tags to [notes-nr] notes: ${tags.map ( tag => `"${tag}"`).join ( ', ' )}?` ) ) return;
+    tags = Tags.sort(tags) as string[];
 
-    return this._callAll ( this.ctx.note.addTags, [tags] );
+    if (
+      !this._confirm(
+        `Are you sure you want to remove these tags from [notes-nr] notes: ${tags
+          .map((tag) => `"${tag}"`)
+          .join(", ")}?`
+      )
+    )
+      return;
 
-  }
-
-  tagsRemove = async ( tags: string[] ) => {
-
-    if ( !tags.length ) return Dialog.alert ( 'No tags provided' );
-
-    tags = Tags.sort ( tags ) as string[];
-
-    if ( !this._confirm ( `Are you sure you want to remove these tags from [notes-nr] notes: ${tags.map ( tag => `"${tag}"`).join ( ', ' )}?` ) ) return;
-
-    return this._callAll ( this.ctx.note.removeTags, [tags] );
-
-  }
+    return this._callAll(this.ctx.note.removeTags, [tags]);
+  };
 
   openInApp = () => {
-
-    return this._callAll ( this.ctx.note.openInApp );
-
-  }
-
+    return this._callAll(this.ctx.note.openInApp);
+  };
 }
 
 /* EXPORT */

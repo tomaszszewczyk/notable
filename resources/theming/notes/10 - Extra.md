@@ -1,7 +1,7 @@
 ---
 title: 10 - Extra
-created: '2019-03-02T01:08:27.349Z'
-modified: '2019-03-02T02:05:37.437Z'
+created: "2019-03-02T01:08:27.349Z"
+modified: "2019-03-02T02:05:37.437Z"
 tags: [Basics, Notebooks/Theming]
 ---
 
@@ -20,10 +20,10 @@ Emoji :joy:
 
 ### ~~_**`everything`**_~~ [link](#)
 
-+ ~~_**`everything`**_~~ [link](#)
-
-***
+- ~~_**`everything`**_~~ [link](#)
 
 ---
 
-___
+---
+
+---

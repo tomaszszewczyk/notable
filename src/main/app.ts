@@ -1,261 +1,226 @@
-
 /* IMPORT */
 
-import {app, ipcMain as ipc, Event, Menu, MenuItemConstructorOptions, shell} from 'electron';
-import {autoUpdater as updater} from 'electron-updater';
-import {enforceMacOSAppLocation, is} from 'electron-util';
-import * as fs from 'fs';
-import pkg from '@root/package.json';
-import Config from '@common/config';
-import Environment from '@common/environment';
-import Notification from '@main/utils/notification';
-import UMenu from '@main/utils/menu';
-import CWD from './windows/cwd';
-import Main from './windows/main';
-import Window from './windows/window';
+import {
+  app,
+  ipcMain as ipc,
+  Event,
+  Menu,
+  MenuItemConstructorOptions,
+  shell,
+} from "electron";
+import { autoUpdater as updater } from "electron-updater";
+import { enforceMacOSAppLocation, is } from "electron-util";
+import * as fs from "fs";
+import pkg from "@root/package.json";
+import Config from "@common/config";
+import Environment from "@common/environment";
+import Notification from "@main/utils/notification";
+import UMenu from "@main/utils/menu";
+import CWD from "./windows/cwd";
+import Main from "./windows/main";
+import Window from "./windows/window";
 
 /* APP */
 
 class App {
-
   /* VARIABLES */
 
   win: Window | undefined;
 
   /* CONSTRUCTOR */
 
-  constructor () {
-
-    this.init ();
-    this.events ();
-
+  constructor() {
+    this.init();
+    this.events();
   }
 
   /* SPECIAL */
 
-  init () {
-
-    this.initContextMenu ();
-    this.initMenu ();
-
+  init() {
+    this.initContextMenu();
+    this.initMenu();
   }
 
-  initContextMenu () {}
+  initContextMenu() {}
 
-  initMenu () {
-
-    const template: MenuItemConstructorOptions[] = UMenu.filterTemplate ([
+  initMenu() {
+    const template: MenuItemConstructorOptions[] = UMenu.filterTemplate([
       {
         label: pkg.productName,
         submenu: [
           {
-            label: 'Open',
-            accelerator: 'CmdOrCtrl+O',
-            click: this.load.bind ( this )
+            label: "Open",
+            accelerator: "CmdOrCtrl+O",
+            click: this.load.bind(this),
           },
-          { role: 'quit' }
-        ]
-      }
+          { role: "quit" },
+        ],
+      },
     ]);
 
-    const menu = Menu.buildFromTemplate ( template );
+    const menu = Menu.buildFromTemplate(template);
 
-    Menu.setApplicationMenu ( menu );
-
+    Menu.setApplicationMenu(menu);
   }
 
-  async initDebug () {
+  async initDebug() {
+    if (!Environment.isDevelopment) return;
 
-    if ( !Environment.isDevelopment ) return;
+    const { default: installExtension, REACT_DEVELOPER_TOOLS } = await import(
+      "electron-devtools-installer"
+    );
 
-    const {default: installExtension, REACT_DEVELOPER_TOOLS} = await import ( 'electron-devtools-installer' );
-
-    installExtension ( REACT_DEVELOPER_TOOLS );
-
+    installExtension(REACT_DEVELOPER_TOOLS);
   }
 
-  events () {
-
-    this.___windowAllClosed ();
-    this.___activate ();
-    this.___beforeQuit ();
-    this.___forceQuit ();
-    this.___ready ();
-    this.___cwdChanged ();
-    this.___updaterCheck ();
-
+  events() {
+    this.___windowAllClosed();
+    this.___activate();
+    this.___beforeQuit();
+    this.___forceQuit();
+    this.___ready();
+    this.___cwdChanged();
+    this.___updaterCheck();
   }
 
   /* WINDOW ALL CLOSED */
 
   ___windowAllClosed = () => {
-
-    app.on ( 'window-all-closed', this.__windowAllClosed );
-
-  }
+    app.on("window-all-closed", this.__windowAllClosed);
+  };
 
   __windowAllClosed = () => {
+    if (is.macos) return this.initMenu();
 
-    if ( is.macos ) return this.initMenu ();
-
-    this.quit ();
-
-  }
+    this.quit();
+  };
 
   /* ACTIVATE */
 
   ___activate = () => {
-
-    app.on ( 'activate', this.__activate );
-
-  }
+    app.on("activate", this.__activate);
+  };
 
   __activate = () => {
+    if (this.win && this.win.win) return;
 
-    if ( this.win && this.win.win ) return;
-
-    this.load ();
-
-  }
+    this.load();
+  };
 
   /* BEFORE QUIT */
 
   ___beforeQuit = () => {
-
-    app.on ( 'before-quit', this.__beforeQuit );
-
-  }
+    app.on("before-quit", this.__beforeQuit);
+  };
 
   ___beforeQuit_off = () => {
+    app.removeListener("before-quit", this.__beforeQuit);
+  };
 
-    app.removeListener ( 'before-quit', this.__beforeQuit );
+  __beforeQuit = (event: Event) => {
+    if (!this.win || !this.win.win) return;
 
-  }
+    event.preventDefault();
 
-  __beforeQuit = ( event: Event ) => {
-
-    if ( !this.win || !this.win.win ) return;
-
-    event.preventDefault ();
-
-    this.win.win.webContents.send ( 'app-quit' );
-
-  }
+    this.win.win.webContents.send("app-quit");
+  };
 
   /* FORCE QUIT */
 
   ___forceQuit = () => {
-
-    ipc.on ( 'force-quit', this.__forceQuit );
-
-  }
+    ipc.on("force-quit", this.__forceQuit);
+  };
 
   __forceQuit = () => {
-
-    this.quit ();
-
-  }
+    this.quit();
+  };
 
   /* READY */
 
   ___ready = () => {
-
-    app.on ( 'ready', this.__ready );
-
-  }
+    app.on("ready", this.__ready);
+  };
 
   __ready = () => {
+    enforceMacOSAppLocation();
 
-    enforceMacOSAppLocation ();
+    this.initDebug();
 
-    this.initDebug ();
-
-    this.load ();
-
-  }
+    this.load();
+  };
 
   /* CWD CHANGED */
 
   ___cwdChanged = () => {
-
-    ipc.on ( 'cwd-changed', this.__cwdChanged );
-
-  }
+    ipc.on("cwd-changed", this.__cwdChanged);
+  };
 
   __cwdChanged = () => {
+    if (this.win && this.win.win) {
+      this.win.win.once("closed", this.load.bind(this));
 
-    if ( this.win && this.win.win ) {
-
-      this.win.win.once ( 'closed', this.load.bind ( this ) );
-
-      this.win.win.close ();
-
+      this.win.win.close();
     } else {
-
-      this.load ();
-
+      this.load();
     }
-
-  }
+  };
 
   /* UPDATER CHECK */
 
   ___updaterCheck = () => {
+    ipc.on("updater-check", this.__updaterCheck);
+  };
 
-    ipc.on ( 'updater-check', this.__updaterCheck );
+  __updaterCheck = async (notifications: Event | boolean = false) => {
+    updater.removeAllListeners();
 
-  }
-
-  __updaterCheck = async ( notifications: Event | boolean = false ) => {
-
-    updater.removeAllListeners ();
-
-    if ( notifications === true ) {
-
-      updater.on ( 'update-available', () => Notification.show ( 'A new update is available', 'Downloading it right now...' ) );
-      updater.on ( 'update-not-available', () => Notification.show ( 'No update is available', 'You\'re already using the latest version' ) );
-      updater.on ( 'error', err => {
-        Notification.show ( 'An error occurred', err.message );
-        Notification.show ( 'Update manually', 'Download the new version manually to update the app' );
-        shell.openExternal ( pkg['download'].url );
+    if (notifications === true) {
+      updater.on("update-available", () =>
+        Notification.show(
+          "A new update is available",
+          "Downloading it right now..."
+        )
+      );
+      updater.on("update-not-available", () =>
+        Notification.show(
+          "No update is available",
+          "You're already using the latest version"
+        )
+      );
+      updater.on("error", (err) => {
+        Notification.show("An error occurred", err.message);
+        Notification.show(
+          "Update manually",
+          "Download the new version manually to update the app"
+        );
+        shell.openExternal(pkg["download"].url);
       });
-
     }
 
-    updater.checkForUpdatesAndNotify ();
-
-  }
+    updater.checkForUpdatesAndNotify();
+  };
 
   /* API */
 
-  load () {
-
+  load() {
     const cwd = Config.cwd;
 
-    if ( cwd && fs.existsSync ( cwd ) ) {
-
-      this.win = new Main ();
-
+    if (cwd && fs.existsSync(cwd)) {
+      this.win = new Main();
     } else {
-
-      this.win = new CWD ();
-
+      this.win = new CWD();
     }
 
-    this.win.init ();
-
+    this.win.init();
   }
 
-  quit () {
-
+  quit() {
     global.isQuitting = true;
 
-    this.___beforeQuit_off ();
+    this.___beforeQuit_off();
 
-    app.quit ();
-
+    app.quit();
   }
-
 }
 
 /* EXPORT */

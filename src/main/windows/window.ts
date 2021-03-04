@@ -1,19 +1,17 @@
-
 /* IMPORT */
 
-import * as _ from 'lodash';
-import * as path from 'path';
-import {BrowserWindow, BrowserWindowConstructorOptions} from 'electron';
-import {is} from 'electron-util';
-import * as windowStateKeeper from 'electron-window-state';
-import pkg from '@root/package.json';
-import Environment from '@common/environment';
-import Settings from '@common/settings';
+import * as _ from "lodash";
+import * as path from "path";
+import { BrowserWindow, BrowserWindowConstructorOptions } from "electron";
+import { is } from "electron-util";
+import * as windowStateKeeper from "electron-window-state";
+import pkg from "@root/package.json";
+import Environment from "@common/environment";
+import Settings from "@common/settings";
 
 /* WINDOW */
 
 class Window {
-
   /* VARIABLES */
 
   name: string;
@@ -24,155 +22,146 @@ class Window {
 
   /* CONSTRUCTOR */
 
-  constructor ( name: string, options: BrowserWindowConstructorOptions = {}, stateOptions: windowStateKeeper.Options = {} ) {
-
+  constructor(
+    name: string,
+    options: BrowserWindowConstructorOptions = {},
+    stateOptions: windowStateKeeper.Options = {}
+  ) {
     this.name = name;
     this.options = options;
     this.stateOptions = stateOptions;
-
   }
 
   /* SPECIAL */
 
-  init () {
+  init() {
+    this.initWindow();
+    this.initDebug();
+    this.initLocalShortcuts();
+    this.initMenu();
 
-    this.initWindow ();
-    this.initDebug ();
-    this.initLocalShortcuts ();
-    this.initMenu ();
-
-    this.load ();
-    this.events ();
-
+    this.load();
+    this.events();
   }
 
-  initWindow () {
-
-    this.win = this.make ();
-
+  initWindow() {
+    this.win = this.make();
   }
 
-  initDebug () {
+  initDebug() {
+    if (!Environment.isDevelopment) return;
 
-    if ( !Environment.isDevelopment ) return;
-
-    this.win.webContents.openDevTools ({
-      mode: 'undocked'
+    this.win.webContents.openDevTools({
+      mode: "undocked",
     });
 
-    this.win.webContents.on ( 'devtools-opened', () => {
+    this.win.webContents.on("devtools-opened", () => {
+      this.win.focus();
 
-      this.win.focus ();
-
-      setImmediate ( () => this.win.focus () );
-
+      setImmediate(() => this.win.focus());
     });
-
   }
 
-  initMenu () {}
+  initMenu() {}
 
-  initLocalShortcuts () {}
+  initLocalShortcuts() {}
 
-  events () {
-
-    this.___didFinishLoad ();
-    this.___closed ();
-    this.___focused ();
-
+  events() {
+    this.___didFinishLoad();
+    this.___closed();
+    this.___focused();
   }
 
-  cleanup () {
-
-    this.win.removeAllListeners ();
-
+  cleanup() {
+    this.win.removeAllListeners();
   }
 
   /* READY TO SHOW */
 
   ___didFinishLoad = () => {
-
-    this.win.webContents.on ( 'did-finish-load', this.__didFinishLoad );
-
-  }
+    this.win.webContents.on("did-finish-load", this.__didFinishLoad);
+  };
 
   __didFinishLoad = () => {
+    if (this._didFocus) return;
 
-    if ( this._didFocus ) return;
-
-    this.win.show ();
-    this.win.focus ();
-
-  }
+    this.win.show();
+    this.win.focus();
+  };
 
   /* CLOSED */
 
   ___closed = () => {
-
-    this.win.on ( 'closed', this.__closed );
-
-  }
+    this.win.on("closed", this.__closed);
+  };
 
   __closed = () => {
-
-    this.cleanup ();
+    this.cleanup();
 
     delete this.win;
-
-  }
+  };
 
   /* FOCUSED */
 
   ___focused = () => {
-
-    this.win.on ( 'focus', this.__focused );
-
-  }
+    this.win.on("focus", this.__focused);
+  };
 
   __focused = () => {
-
     this._didFocus = true;
 
-    this.initMenu ();
-
-  }
+    this.initMenu();
+  };
 
   /* API */
 
-  make ( id = this.name, options = this.options, stateOptions = this.stateOptions ) {
+  make(
+    id = this.name,
+    options = this.options,
+    stateOptions = this.stateOptions
+  ) {
+    stateOptions = _.merge(
+      {
+        file: `${id}.json`,
+        defaultWidth: 600,
+        defaultHeight: 600,
+      },
+      stateOptions
+    );
 
-    stateOptions = _.merge ({
-      file: `${id}.json`,
-      defaultWidth: 600,
-      defaultHeight: 600
-    }, stateOptions );
+    const state = windowStateKeeper(stateOptions),
+      dimensions = _.pick(state, ["x", "y", "width", "height"]);
 
-    const state = windowStateKeeper ( stateOptions ),
-          dimensions = _.pick ( state, ['x', 'y', 'width', 'height'] );
+    options = _.merge(
+      dimensions,
+      {
+        frame: !is.macos,
+        backgroundColor:
+          Settings.get("theme") === "light" ? "#F7F7F7" : "#0F0F0F", //TODO: This won't scale with custom themes
+        icon: path.join(
+          __static,
+          "images",
+          `icon.${is.windows ? "ico" : "png"}`
+        ),
+        show: false,
+        title: pkg.productName,
+        titleBarStyle: "hiddenInset",
+        webPreferences: {
+          nodeIntegration: true,
+          webSecurity: false,
+        },
+      },
+      options
+    );
 
-    options = _.merge ( dimensions, {
-      frame: !is.macos,
-      backgroundColor: ( Settings.get ( 'theme' ) === 'light' ) ? '#F7F7F7' : '#0F0F0F', //TODO: This won't scale with custom themes
-      icon: path.join ( __static, 'images', `icon.${is.windows ? 'ico' : 'png'}` ),
-      show: false,
-      title: pkg.productName,
-      titleBarStyle: 'hiddenInset',
-      webPreferences: {
-        nodeIntegration: true,
-        webSecurity: false
-      }
-    }, options );
+    const win = new BrowserWindow(options);
 
-    const win = new BrowserWindow ( options );
-
-    state.manage ( win );
+    state.manage(win);
 
     return win;
-
   }
 
-  load () {}
-
+  load() {}
 }
 
 /* EXPORT */

@@ -1,12 +1,11 @@
-
 /* IMPORT */
 
-import {is} from 'electron-util';
-import * as React from 'react';
-import {connect} from 'overstated';
-import Main from '@renderer/containers/main';
-import Search from './toolbar_search';
-import NewButton from './toolbar_button_new';
+import { is } from "electron-util";
+import * as React from "react";
+import { connect } from "overstated";
+import Main from "@renderer/containers/main";
+import Search from "./toolbar_search";
+import NewButton from "./toolbar_button_new";
 
 /* TOOLBAR */
 
@@ -24,10 +23,10 @@ const Toolbar = ({ isFullscreen, hasSidebar }) => (
 
 /* EXPORT */
 
-export default connect ({
+export default connect({
   container: Main,
   selector: ({ container }) => ({
-    isFullscreen: container.window.isFullscreen (),
-    hasSidebar: container.window.hasSidebar ()
-  })
-})( Toolbar );
+    isFullscreen: container.window.isFullscreen(),
+    hasSidebar: container.window.hasSidebar(),
+  }),
+})(Toolbar);

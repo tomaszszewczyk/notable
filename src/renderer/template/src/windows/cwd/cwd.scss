@@ -1,6 +1,4 @@
-
 .cwd {
-
   .layout-content {
     height: auto;
   }
@@ -10,11 +8,14 @@
   }
 
   .button.default {
-    @include theme-background-color ( transparent, rgba( #000000, .1 ), rgba( #000000, .2 ) ); /* UGLY */
+    @include theme-background-color(
+      transparent,
+      rgba(#000000, 0.1),
+      rgba(#000000, 0.2)
+    ); /* UGLY */
   }
 
   .button.giant {
     font-size: 75px;
   }
-
 }

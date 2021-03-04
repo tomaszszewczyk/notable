@@ -1,20 +1,15 @@
-
 /* IMPORT */
 
-import {Notification as ENotification} from 'electron';
+import { Notification as ENotification } from "electron";
 
 /* NOTIFICATION */
 
 const Notification = {
+  show(title: string, body: string) {
+    const notification = new ENotification({ title, body });
 
-  show ( title: string, body: string ) {
-
-    const notification = new ENotification ({ title, body });
-
-    notification.show ();
-
-  }
-
+    notification.show();
+  },
 };
 
 /* EXPORT */

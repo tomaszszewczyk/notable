@@ -1,6 +1,4 @@
-
 .preview {
-
   code,
   pre {
     border-radius: 3px;
@@ -28,16 +26,17 @@
     font-size: $highlighter-font-size;
   }
 
-  p code:before, p code:after,
+  p code:before,
+  p code:after,
   li code:before,
   li code:after,
   table code:before,
   table code:after {
     letter-spacing: -0.2em;
-    content: '\00a0';
+    content: "\00a0";
   }
 
-  :not(pre) > code[class*='language-'] {
+  :not(pre) > code[class*="language-"] {
     padding: 0.1em;
     border-radius: 0.3em;
   }
@@ -57,5 +56,4 @@
   .namespace {
     opacity: 0.7;
   }
-
 }

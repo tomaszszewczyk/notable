@@ -1,8 +1,5 @@
-
-@mixin theme-core-input ( $theme ) {
-
+@mixin theme-core-input($theme) {
   ::placeholder {
-    color: rgba( map-get( $theme, 'base.foreground' ), .65 );
+    color: rgba(map-get($theme, "base.foreground"), 0.65);
   }
-
 }

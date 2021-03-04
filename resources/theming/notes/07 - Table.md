@@ -1,7 +1,7 @@
 ---
 title: 07 - Table
-created: '2019-03-02T01:07:23.016Z'
-modified: '2019-05-09T21:34:25.079Z'
+created: "2019-03-02T01:07:23.016Z"
+modified: "2019-05-09T21:34:25.079Z"
 tags: [Basics, Notebooks/Theming]
 ---
 

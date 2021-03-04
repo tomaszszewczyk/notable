@@ -1,19 +1,22 @@
-
 /* IMPORT */
 
-const TerserPlugin = require ( 'terser-webpack-plugin' ),
-      TSConfigPathsPlugin = require ( 'tsconfig-paths-webpack-plugin' ),
-      webpack = require ( 'webpack' );
+const TerserPlugin = require("terser-webpack-plugin"),
+  TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin"),
+  webpack = require("webpack");
 
 /* PLUGINS */
 
-function PluginSkeletonOptimization ( compiler ) { // Loading heavy resources after the skeleton
-  compiler.plugin ( 'compilation', compilation => {
+function PluginSkeletonOptimization(compiler) {
+  // Loading heavy resources after the skeleton
+  compiler.plugin("compilation", (compilation) => {
     compilation.hooks.htmlWebpackPluginAfterHtmlProcessing = {
-      async promise ( data ) {
-        data.html = data.html.replace ( /<link(.*?)rel="stylesheet">(.*?)<body>(.*?)<script/, '$2<body>$3<link$1rel="stylesheet"><script' ); // Moving the main CSS to the bottom in order to make the skeleton load faster
+      async promise(data) {
+        data.html = data.html.replace(
+          /<link(.*?)rel="stylesheet">(.*?)<body>(.*?)<script/,
+          '$2<body>$3<link$1rel="stylesheet"><script'
+        ); // Moving the main CSS to the bottom in order to make the skeleton load faster
         return data;
-      }
+      },
     };
   });
 }
@@ -23,29 +26,32 @@ function PluginSkeletonOptimization ( compiler ) { // Loading heavy resources af
 const config = {
   resolve: {
     alias: {
-      'react-dom': process.env.NODE_ENV !== 'production' ? '@hot-loader/react-dom' : 'react-dom'
+      "react-dom":
+        process.env.NODE_ENV !== "production"
+          ? "@hot-loader/react-dom"
+          : "react-dom",
     },
-    plugins: [
-      new TSConfigPathsPlugin ()
-    ]
+    plugins: [new TSConfigPathsPlugin()],
   },
   plugins: [
-    new webpack.DefinePlugin ({
-      'Environment.isDevelopment': JSON.stringify ( process.env.NODE_ENV !== 'production' )
+    new webpack.DefinePlugin({
+      "Environment.isDevelopment": JSON.stringify(
+        process.env.NODE_ENV !== "production"
+      ),
     }),
-    PluginSkeletonOptimization
+    PluginSkeletonOptimization,
   ],
   optimization: {
     minimizer: [
-      new TerserPlugin ({
+      new TerserPlugin({
         parallel: true,
         sourceMap: true,
         terserOptions: {
-          keep_fnames: true
-        }
-      })
-    ]
-  }
+          keep_fnames: true,
+        },
+      }),
+    ],
+  },
 };
 
 /* EXPORT */

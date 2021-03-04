@@ -1,8 +1,7 @@
-
 /* IMPORT */
 
-import * as React from 'react';
-import Content from './content';
+import * as React from "react";
+import Content from "./content";
 
 /* MAINBAR */
 

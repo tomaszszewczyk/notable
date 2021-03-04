@@ -1,10 +1,9 @@
-
 /* IMPORT */
 
-import * as React from 'react';
-import Header from './header';
-import Content from './content';
-import Footer from './footer';
+import * as React from "react";
+import Header from "./header";
+import Content from "./content";
+import Footer from "./footer";
 
 /* CWD */
 

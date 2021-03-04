@@ -1,159 +1,136 @@
-
 /* IMPORT */
 
-import * as _ from 'lodash';
-import {Container, autosuspend} from 'overstated';
-import {TagSpecials} from '@renderer/utils/tags';
+import * as _ from "lodash";
+import { Container, autosuspend } from "overstated";
+import { TagSpecials } from "@renderer/utils/tags";
 
 /* QUICK PANEL */
 
 class QuickPanel extends Container<QuickPanelState, MainCTX> {
-
   /* STATE */
 
   state = {
     open: false,
-    query: '',
+    query: "",
     itemIndex: 0,
     results: {
-      empty: 'No results found',
-      items: []
-    } as QuickPanelResults
+      empty: "No results found",
+      items: [],
+    } as QuickPanelResults,
   };
 
   /* HELPERS */
 
-  _searchBy = ( query: string ): QuickPanelResults => {
-
-    const notes = this.ctx.search._searchBy ( TagSpecials.ALL, false, query, 'quick-panel' ),
-          attachments = this.ctx.search._filterAttachmentsByQuery ( Object.values ( this.ctx.attachments.get () ), query ); //OPTIMIZE: Optimize attachments search like we are optimizing notes searches
+  _searchBy = (query: string): QuickPanelResults => {
+    const notes = this.ctx.search._searchBy(
+        TagSpecials.ALL,
+        false,
+        query,
+        "quick-panel"
+      ),
+      attachments = this.ctx.search._filterAttachmentsByQuery(
+        Object.values(this.ctx.attachments.get()),
+        query
+      ); //OPTIMIZE: Optimize attachments search like we are optimizing notes searches
 
     return {
-      empty: 'No results found',
-      items: [...notes, ...attachments]
+      empty: "No results found",
+      items: [...notes, ...attachments],
     };
-
-  }
+  };
 
   /* CONSTRUCTOR */
 
-  constructor () {
+  constructor() {
+    super();
 
-    super ();
-
-    autosuspend ( this );
-
+    autosuspend(this);
   }
 
   /* API */
 
-  openNth = async ( nth: number ) => {
-
+  openNth = async (nth: number) => {
     const item = this.state.results.items[nth];
 
-    await this.toggleOpen ( false );
+    await this.toggleOpen(false);
 
-    if ( !item ) return;
+    if (!item) return;
 
-    if ( item.hasOwnProperty ( 'metadata' ) ) return this.ctx.note.set ( item as NoteObj, true );
+    if (item.hasOwnProperty("metadata"))
+      return this.ctx.note.set(item as NoteObj, true);
 
-    if ( item.hasOwnProperty ( 'fileName' ) ) return this.ctx.attachment.openInApp ( item as AttachmentObj );
-
-  }
+    if (item.hasOwnProperty("fileName"))
+      return this.ctx.attachment.openInApp(item as AttachmentObj);
+  };
 
   isOpen = (): boolean => {
-
     return this.state.open;
+  };
 
-  }
-
-  toggleOpen = ( open: boolean = !this.state.open ) => {
-
-    return this.setState ({ open });
-
-  }
+  toggleOpen = (open: boolean = !this.state.open) => {
+    return this.setState({ open });
+  };
 
   getQuery = (): string => {
-
     return this.state.query;
+  };
 
-  }
+  setQuery = async (query: string) => {
+    await this.setState({ query });
 
-  setQuery = async ( query: string ) => {
+    return this.update();
+  };
 
-    await this.setState ({ query });
+  scrollTo = (index: number) => {
+    const { results } = this.state;
 
-    return this.update ();
+    if (index < 0 || index > results.items.length) return;
 
-  }
-
-  scrollTo = ( index: number ) => {
-
-    const {results} = this.state;
-
-    if ( index < 0 || index > results.items.length ) return;
-
-    $('.list-quick-panel').trigger ( 'scroll-to-item', index );
-
-  }
+    $(".list-quick-panel").trigger("scroll-to-item", index);
+  };
 
   getItemIndex = (): number => {
-
     return this.state.itemIndex;
+  };
 
-  }
+  setItemIndex = async (itemIndex: number) => {
+    await this.setState({ itemIndex });
 
-  setItemIndex = async ( itemIndex: number ) => {
+    this.scrollTo(itemIndex);
+  };
 
-    await this.setState ({ itemIndex });
+  navigateItem = (modifier: number, wrap: boolean = true) => {
+    const { itemIndex, results } = this.state,
+      index = itemIndex + modifier,
+      indexNext = wrap
+        ? (results.items.length + index) % results.items.length
+        : index;
 
-    this.scrollTo ( itemIndex );
-
-  }
-
-  navigateItem = ( modifier: number, wrap: boolean = true ) => {
-
-    const {itemIndex, results} = this.state,
-          index = itemIndex + modifier,
-          indexNext = wrap ? ( results.items.length + index ) % results.items.length : index;
-
-    return this.setItemIndex ( indexNext );
-
-  }
+    return this.setItemIndex(indexNext);
+  };
 
   prevItem = () => {
-
-    return this.navigateItem ( -1 );
-
-  }
+    return this.navigateItem(-1);
+  };
 
   nextItem = () => {
-
-    return this.navigateItem ( 1 );
-
-  }
+    return this.navigateItem(1);
+  };
 
   getResults = () => {
-
     return this.state.results;
+  };
 
-  }
-
-  setResults = ( results: QuickPanelResults ) => {
-
-    return this.setState ({ results });
-
-  }
+  setResults = (results: QuickPanelResults) => {
+    return this.setState({ results });
+  };
 
   update = () => {
+    const results = this._searchBy(this.state.query),
+      itemIndex = 0;
 
-    const results = this._searchBy ( this.state.query ),
-          itemIndex = 0;
-
-    return this.setState ({ itemIndex, results });
-
-  }
-
+    return this.setState({ itemIndex, results });
+  };
 }
 
 /* EXPORT */

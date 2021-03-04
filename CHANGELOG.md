@@ -1,10 +1,12 @@
 ### Version 1.5.1
 
 ##### Improvements
+
 - Auto-hiding the menu in the “Select Data Directory” window
 - MacOS: asking the user to move the app to `/Applications`
 
 ##### Bug Fixes
+
 - Ensuring the Linux releases work
 - Updater: fixed link to latest linux release
 - Updater: fixed link to latest windows release
@@ -12,6 +14,7 @@
 ### Version 1.5.0
 
 ##### New Features
+
 - Added a dark theme
 - Editor: added cut/copy/paste support via the context menu
 - Mermaid: added a button for opening diagrams in a separate window
@@ -19,6 +22,7 @@
 - Added context menu actions for copying attachments/tags/notes names
 
 ##### Improvements
+
 - Upgraded to Electron v5
 - Moved import/export menu entries under “File”
 - Markdown: improved stripping of headers, emojis, images, links, wikilinks and todos
@@ -28,6 +32,7 @@
 - Export: ensuring codeblocks in exported PDFs don't need to be scrolled
 
 ##### Bug Fixes
+
 - Saving notes more reliably
 - Monaco: fixed blurriness issue
 - Ensuring the highlighter outputs valid HTML
@@ -44,6 +49,7 @@
 ### Version 1.4.0
 
 ##### New Features
+
 - Switched to the AGPL license
 - Added a “Toggle Sidebar” menu entry
 - Added a Zen mode
@@ -56,6 +62,7 @@
   - Check all the updated shortcuts [here](https://github.com/notable/notable/blob/master/resources%2Ftutorial%2Fnotes%2F07%20-%20Shortcuts.md#editor)
 
 ##### Improvements
+
 - Wiki-style links: always treat them as inline links
 - Syntax highlighting: improved support for some shell languages
 - Prompting the user before overwriting unsaved changes
@@ -66,6 +73,7 @@
 - Automatically selecting the title when editing empty notes
 
 ##### Bug Fixes
+
 - AsciiMath/KaTeX: ensuring the special characters can be escaped with a backslash
 - Ensuring 1-character KaTex and AsciiMath expressions are supported
 - Ensuring HTML entities don’t cause unnecessary AsciiMath renders
@@ -89,12 +97,14 @@
 ### Version 1.3.0
 
 ##### New Features
+
 - Updater: added a menu entry for checking for updates
 - Added a menu entry for opening the subreddit
 - Added Wiki-style links supports
 - Added support for linking to attachments from `source` elements
 
 ##### Improvements
+
 - Notes: avoiding unnecessary updates because of filesystem changes
 - Much more reliable autosaving and more accurate modification date
 - Dependencies: removed `remark` and `strip-markdown`
@@ -113,6 +123,7 @@
 - Tutorial: updated sections about KaTeX and AsciiMath
 
 ##### Bug Fixes
+
 - Fixed support for URLs fragments
 - Fixed support for relative links inside `a` and `img` tags
 - Markdown: made extensions much more reliable
@@ -142,6 +153,7 @@
 ### Version 1.2.0
 
 ##### New Features
+
 - Added a cross-platform “About” window
 - Export: added support for HTML
 - Export: added support for Markdown
@@ -160,6 +172,7 @@
 - Preserving metadata about creation and modification dates
 
 ##### Improvements
+
 - Tutorial: improved KaTeX syntax examples
 - Opening the parent of the current data directory when changing it
 - Opening the current attachments directory when adding some new attachments
@@ -179,6 +192,7 @@
 - Upgraded electron to v4
 
 ##### Bug Fixes
+
 - Avoiding copying the file to attach if it’s already an attachment
 - Linux: fixed icon generation
 - Much more resilient metadata sanitization and parsing
@@ -194,6 +208,7 @@
 ### Version 1.1.0
 
 ##### New Features
+
 - Added support for `.txt` files
 - Added KaTeX support
 - Added support for Mermaid charts
@@ -203,6 +218,7 @@
 - Using the current query as the newly created note’s title if the query returned no matches
 
 ##### Improvements
+
 - Improved perceived startup time
 - Automatically tag/favorite/trash a new note in order to keep it in the currently active section
 - Added some more shortcuts for navigating tags/notes
@@ -216,6 +232,7 @@
 - Using more ergonomic shortcuts for toggling editing
 
 ##### Bug Fixes
+
 - Avoiding using a form for the search box
 - Search: ensuring the list gets refreshed when changing the sorting order
 - Improved support for titles containing non-English characters
@@ -232,6 +249,7 @@
 - Ensuring checkboxes are always displayed
 
 ### Version 1.0.1
+
 - Simplified import tag
 - Multi-Editor: improved confirmation messages for adding/removing tags
 - Tagbox: ensuring their never share the same name
@@ -255,4 +273,5 @@
 - Ensuring the `Tags` special tag is never deleted
 
 ### Version 1.0.0
+
 - Initial release.

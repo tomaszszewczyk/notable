@@ -1,7 +1,7 @@
 ---
 title: 15 - KaTeX
-created: '2019-03-02T01:09:32.132Z'
-modified: '2019-03-02T02:05:37.445Z'
+created: "2019-03-02T01:09:32.132Z"
+modified: "2019-03-02T02:05:37.445Z"
 tags: [Plugins, Notebooks/Theming]
 ---
 

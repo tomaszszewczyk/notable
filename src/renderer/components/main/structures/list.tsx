@@ -1,14 +1,11 @@
-
 /* IMPORT */
 
-import * as React from 'react';
-import Tree from './tree';
+import * as React from "react";
+import Tree from "./tree";
 
 /* LIST */
 
-const List = ( props ) => (
-  <Tree {...props} isFlat={true} />
-);
+const List = (props) => <Tree {...props} isFlat={true} />;
 
 /* EXPORT */
 

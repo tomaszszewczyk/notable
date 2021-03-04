@@ -1,8 +1,7 @@
-
 @font-face {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(#{$icon-path-fonts}IconFont.woff2#{$revision}) format('woff2');
+  src: url(#{$icon-path-fonts}IconFont.woff2#{$revision}) format("woff2");
 }

@@ -35,7 +35,7 @@ $$\ce{ SO4^2- + Ba^2+ -> BaSO4 v }$$
 
 Wrap a formula in `&&` to display it as a block:
 
-&&sum_(i=1)^n i^3=((n(n+1))/2)^2&&
+&&sum\_(i=1)^n i^3=((n(n+1))/2)^2&&
 
 Wrap it in `&` to display it inline: &e = mc^2&.
 

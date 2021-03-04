@@ -1,8 +1,7 @@
-
 /* IMPORT */
 
-import App from './app';
+import App from "./app";
 
 /* MAIN */
 
-new App ();
+new App();

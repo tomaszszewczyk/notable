@@ -1,5 +1,3 @@
 {
-  "ignore": [
-    "./src/renderer/template/dist"
-  ]
+  "ignore": ["./src/renderer/template/dist"]
 }

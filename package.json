@@ -44,11 +44,7 @@
       "output": "releases"
     },
     "mac": {
-      "target": [
-        "dmg",
-        "pkg",
-        "zip"
-      ],
+      "target": ["pkg"],
       "category": "public.app-category.utilities",
       "icon": "resources/icon/icon.png",
       "type": "distribution"

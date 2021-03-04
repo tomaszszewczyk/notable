@@ -123,28 +123,6 @@ const Monaco = {
       },
     },
 
-    "editor.toggleWordWrap": {
-      options: {
-        precondition: EditorContextKeys.writable,
-        kbOpts: {
-          kbExpr: EditorContextKeys.editorTextFocus,
-          primary: monaco.KeyMod.Alt | monaco.KeyCode.KEY_Z,
-          weight: 100,
-        },
-      },
-      handler(accessor, editor: MonacoEditor) {
-        Monaco.editorOptions.wordWrap =
-          Monaco.editorOptions.wordWrap === "bounded" ? "off" : "bounded";
-
-        Settings.set(
-          "monaco.editorOptions.wordWrap",
-          Monaco.editorOptions.wordWrap
-        );
-
-        editor.updateOptions(Monaco.editorOptions);
-      },
-    },
-
     "editor.toggleTodo": {
       options: {
         precondition: EditorContextKeys.writable,

@@ -178,6 +178,7 @@ class Editor extends Container<EditorState, MainCTX> {
 
       return {
         filePath: note.filePath,
+        // @ts-ignore
         scrollTop: $preview[0].scrollTop,
       };
     },
@@ -187,6 +188,7 @@ class Editor extends Container<EditorState, MainCTX> {
 
       if (!$preview) return false;
 
+      // @ts-ignore
       $preview[0].scrollTop = state.scrollTop;
 
       return true;

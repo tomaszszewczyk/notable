@@ -92,6 +92,7 @@ class PreviewPlugins extends Component<{ container: IMain }, {}> {
 
     if (!$svg.length) return;
 
+    // @ts-ignore
     const html = $svg.clone().removeAttr("style")[0].outerHTML, // Removing the style attribute, ensuring the svg is displayed at full-width
       base64 = Buffer.from(html).toString("base64"),
       data = `data:image/svg+xml;base64,${base64}`;

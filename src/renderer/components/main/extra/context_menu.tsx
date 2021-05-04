@@ -1,7 +1,7 @@
 /* IMPORT */
 
 import * as _ from "lodash";
-import { MenuItem, MenuItemConstructorOptions } from "electron";
+import {MenuItem, MenuItemConstructorOptions} from "electron";
 import contextMenu from "electron-context-menu";
 import Dialog from "electron-dialog";
 import { is } from "electron-util";
@@ -48,7 +48,7 @@ class ContextMenu extends Component<{ container: IMain }, {}> {
     itemsUpdater = _.noop
   ) => {
     contextMenu({
-      prepend: () => items as MenuItem[], //TSC: Looks like a bug in `electron-context-menu`?
+      prepend: () => (items as unknown) as MenuItem[], //TSC: Looks like a bug in `electron-context-menu`?
       shouldShowMenu: (event, { x, y }) => {
         const ele = _.isString(selector)
           ? this._getItem(x, y, selector)

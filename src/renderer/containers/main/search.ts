@@ -158,10 +158,12 @@ class Search extends Container<SearchState, MainCTX> {
 
     if (!$input.length) return;
 
+    // @ts-ignore
     $input[0].focus();
   };
 
   hasFocus = (): boolean => {
+    // @ts-ignore
     return document.activeElement === $('.middlebar input[type="search"]')[0];
   };
 
